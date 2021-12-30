@@ -10,10 +10,10 @@ from forms import CreatePostForm, CreateRegistrationForm, LoginForm, CommentForm
 from flask_gravatar import Gravatar
 from functools import wraps
 from sqlalchemy.ext.declarative import declarative_base
-
+import os
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
+app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 ckeditor = CKEditor(app)
 Bootstrap(app)
 login_manager = LoginManager()
@@ -52,7 +52,7 @@ class BlogPost(db.Model):
 
     # Create Foreign Key, "users.id" the users refers to the tablename of User.
     author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    # Create reference to the User object, the "posts" refers to the posts protperty in the User class.
+    # Create reference to the User object, the "posts" refers to the posts property in the User class.
     author = relationship("User", back_populates="posts")
     comment = relationship("Comment", back_populates="parent_post")
     title = db.Column(db.String(250), unique=True, nullable=False)
